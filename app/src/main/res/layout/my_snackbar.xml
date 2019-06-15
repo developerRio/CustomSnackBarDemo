@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    app:cardBackgroundColor="#D703B30D"
+    app:cardBackgroundColor="#FFC107"
     app:cardCornerRadius="12dp">
 
     <RelativeLayout

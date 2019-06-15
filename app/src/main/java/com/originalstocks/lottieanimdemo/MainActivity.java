@@ -1,21 +1,27 @@
 package com.originalstocks.lottieanimdemo;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.behavior.SwipeDismissBehavior;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
     private View container;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,12 @@ public class MainActivity extends AppCompatActivity {
         View viewContainer = snackbar.getView();
         // Getting rid of old school black snackBar color
         viewContainer.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
+
+        // If in case your parent layout is not coordinator
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewContainer.getLayoutParams();
+
+        // but if you're using coordinator layout then change this above line with below or just comment this below line
+        //  CoordinatorLayout.LayoutParams params=(CoordinatorLayout.LayoutParams)viewContainer.getLayoutParams();
         params.height = FrameLayout.LayoutParams.WRAP_CONTENT;  // roughly around 200
         params.width = FrameLayout.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
@@ -70,4 +81,51 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
 
     }
+
+    public void showAnimation(View view) {
+
+        initiatePopupWindow(view);
+
+    }
+
+    private void initiatePopupWindow(View v) {
+        try {
+
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.progress_loader,
+                    (ViewGroup) v.findViewById(R.id.progress_container));
+            popupWindow = new PopupWindow(popupView, 600, 600, true);
+            popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+            dimBehind(popupWindow);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void dimBehind(PopupWindow popupWindow) {
+        View container;
+        if (popupWindow.getBackground() == null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                container = (View) popupWindow.getContentView().getParent();
+            } else {
+                container = popupWindow.getContentView();
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                container = (View) popupWindow.getContentView().getParent().getParent();
+            } else {
+                container = (View) popupWindow.getContentView().getParent();
+            }
+        }
+        Context context = popupWindow.getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.3f;
+        wm.updateViewLayout(container, p);
+    }
+
+
 }

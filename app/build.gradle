@@ -29,4 +29,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     // Dynamic Animation
     implementation 'androidx.dynamicanimation:dynamicanimation:1.1.0-alpha01'
+    // Lottie Animations
+    implementation 'com.airbnb.android:lottie:3.0.0-beta1'
 }

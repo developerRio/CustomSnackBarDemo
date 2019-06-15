@@ -14,4 +14,12 @@
         android:text="Show Snackbar"
         android:textAllCaps="false" />
 
+    <Button
+        android:layout_marginTop="200dp"
+        android:text="Show Animation"
+        android:onClick="showAnimation"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
